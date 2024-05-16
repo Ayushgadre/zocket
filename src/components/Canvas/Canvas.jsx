@@ -3,36 +3,35 @@ import PropTypes from 'prop-types';
 import { drawRect, breakTextIntoLines } from '../../utils/constants.js';
 
 function Canvas({ adInfo }) {
+  // Refs for different canvas elements
   const canvasRef = useRef(null);
   const textcanvasRef = useRef(null);
   const ctacanvasRef = useRef(null);
   const { caption, urls, cta } = adInfo;
 
+  // Function to draw the template images (background, mask, stroke)
   const drawTemplate = useCallback(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const image = new Image();
-    const image2 = new Image();
-    const image3 = new Image();
 
-    image.onload = () => {
-      ctx.drawImage(image, 0, 0);
+    // Function to draw an image on the canvas
+    const drawImage = (src, callback) => {
+      const image = new Image();
+      image.onload = () => {
+        callback(image);
+      };
+      image.src = src;
     };
-    image2.onload = () => {
-      ctx.drawImage(image2, 0, 0);
-    };
-    image3.onload = () => {
-      ctx.drawImage(image3, 0, 0);
-    };
-    image.src = urls.design_pattern;
-    image2.src = urls.mask;
-    image3.src = urls.stroke;
+
+    drawImage(urls.design_pattern, (image) => ctx.drawImage(image, 0, 0));
+    drawImage(urls.mask, (image) => ctx.drawImage(image, 0, 0));
+    drawImage(urls.stroke, (image) => ctx.drawImage(image, 0, 0));
   }, [urls]);
 
+  // Function to draw the ad image inside the mask
   const drawAdImage = useCallback((imgUrl) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-
     ctx.globalCompositeOperation = 'source-atop';
     ctx.clearRect(56, 442, 970, 600);
 
@@ -44,30 +43,29 @@ function Canvas({ adInfo }) {
     ctx.globalCompositeOperation = 'source-over';
   }, [adInfo.adImage]);
 
+  // Function to write the caption text on the canvas
   const writeTextContent = useCallback((text) => {
     const canvas = textcanvasRef.current;
     const ctx = canvas.getContext('2d');
-
     const { width, height } = adInfo.image_mask;
     ctx.clearRect(0, 0, width, height);
-
     ctx.fillStyle = '#FFFFFF';
     ctx.font = '46px Sans-serif';
 
-    let startY = 100;
-
     const textToWrite = text || caption.text;
     const lines = breakTextIntoLines(textToWrite, 31, 100);
+
+    let startY = 100;
     lines.forEach((line) => {
       ctx.fillText(line, 120, startY);
       startY += 50;
     });
   }, [adInfo.image_mask, caption.text]);
 
+  // Function to write the CTA text on the canvas
   const writeCTA = useCallback((text) => {
     const canvas = ctacanvasRef.current;
     const ctx = canvas.getContext('2d');
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const backgroundColor = '#000000';
     const textToWrite = text || "Shop Now";
@@ -85,7 +83,6 @@ function Canvas({ adInfo }) {
 
     let startY = 320 + (boxHeight / 2 + 8);
     const startX = 100 + 24;
-
     ctx.fillStyle = '#ffffff';
 
     lines.forEach((line) => {
@@ -94,10 +91,12 @@ function Canvas({ adInfo }) {
     });
   }, []);
 
+  // Draw the template when the component mounts
   useEffect(() => {
     drawTemplate();
   }, [drawTemplate]);
 
+  // Update the canvas elements when the adInfo changes
   useEffect(() => {
     if (caption.text !== undefined) {
       writeTextContent(adInfo.caption.text);
@@ -141,11 +140,26 @@ function Canvas({ adInfo }) {
 
 Canvas.propTypes = {
   adInfo: PropTypes.shape({
-    adText: PropTypes.string,
+    caption: PropTypes.shape({
+      text: PropTypes.string,
+    }),
+    cta: PropTypes.shape({
+      text: PropTypes.string,
+      background_color: PropTypes.string,
+    }),
+    image_mask: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number,
+      width: PropTypes.number,
+      height: PropTypes.number,
+    }),
+    urls: PropTypes.shape({
+      mask: PropTypes.string,
+      stroke: PropTypes.string,
+      design_pattern: PropTypes.string,
+    }),
     adImage: PropTypes.string,
-    adCTA: PropTypes.string,
-    adBgColor: PropTypes.string,
-  }),
+  }).isRequired,
 };
 
 export default Canvas;
