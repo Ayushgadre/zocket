@@ -1,22 +1,31 @@
-class Queue{
-  constructor(){
-    this.array={}
-    this.front=0
-    this.back=0 
+class Queue {
+  constructor() {
+    this.array = []; // Use an array to store queue elements
+  }
+
+  // Method to add an element to the back of the queue
+  push(val) {
+    this.array.push(val);
+  }
+
+  // Method to remove an element from the front of the queue
+  pop() {
+    if (this.array.length === 0) {
+      console.log('Choose color'); // Handle empty queue case
+    } else {
+      return this.array.shift(); // Remove and return the front element
     }
-    push(val){
-     this.array[this.back]=val
-     this.back=this.back+1
-    }
-    pop(){
-     if(Object.keys(this.array).length===0){
-       console.log('Choose color')
-     }
-     else{
-       delete this.array[this.front]
-       this.front=this.front+1;
-     }
-    }
+  }
+
+  // Method to get the current size of the queue
+  size() {
+    return this.array.length;
+  }
+
+  // Method to check if the queue is empty
+  isEmpty() {
+    return this.array.length === 0;
+  }
 }
 
-export default Queue
+export default Queue;
