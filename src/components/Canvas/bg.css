@@ -1,0 +1,42 @@
+
+.diagonal-lines {
+    width: 50%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .diagonal-lines::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(-90deg, #080707, #dddddd 10px, #ffffff 10px, #ffffff 20px); 
+    transform: translateY(-45%);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding:0 45%;
+    color: #4c0e0e;
+  }
+
+  @media screen and (max-width: 900px) {
+    .content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding:0 5%;
+      color: #333;
+    }
+    .diagonal-lines {
+      width: 100%;
+      height: 50vh;
+      position: relative;
+      overflow: hidden;
+    }
+  }
