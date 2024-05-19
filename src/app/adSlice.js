@@ -28,7 +28,7 @@ const initialState = {
       "https://d273i1jagfl543.cloudfront.net/templates/global_temp_landscape_temp_10_Design_Pattern.png", // URL for the design pattern image
   },
   adImage:
-    "https://blog.logomyway.com/wp-content/uploads/2020/09/KFC-logo.jpg", // Default ad image URL
+    "https://scontent.fbho1-1.fna.fbcdn.net/v/t39.30808-6/277250704_281293177516746_4860713848651150406_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_ohc=qaIDPmA3ctUQ7kNvgEGPC4A&_nc_ht=scontent.fbho1-1.fna&oh=00_AYA6AAYTmHnX4Jvjxc2ZkYFiGmHYQNSTZ32djuJ7CEYTtQ&oe=664F4675", // Default ad image URL
 };
 
 // Creating a slice for the ad with initial state and reducers
